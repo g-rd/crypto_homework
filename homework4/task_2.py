@@ -141,9 +141,9 @@ def task_2():
                   f" Eve can use it as a signature for her own message {eve_m}.")
 
     print("\n")
-    print("To check if Alice actually could use it"
-          " to sign her own message we can see if we can find the private key of Eve.")
-    print("And use it to sign Alice's message legitimately.")
+    print("To check if Eve actually could use it"
+          " to sign her own message we can see if we can find the private key of Alice.")
+    print("And use it to sign Eve's message legitimately.")
     print("For this we need to find the value for d (private_key), such that it satisfies: e * d = 1 mod phi(n)"
           )
     print(f"Eve knows Alice's public values for e = {alice_pub_e} and n = {alice_pub_mod}.")
@@ -155,7 +155,7 @@ def task_2():
     print(f"RSA message signing is done using: \n m_hash^d mod phi(n): "
           f"{eve_h}^{modular_inverse(alice_pub_e, phi_n)} mod {phi(alice_pub_mod)} = "
           f"{eve_h**modular_inverse(alice_pub_e, phi_n) % phi(alice_pub_mod)}")
-    print(f"Thus we have proven that the signature of Alices message ({m3}, {h3}) is the same as Eves message ({eve_m}, {eve_h})")
+    print(f"Thus we have proven that the signature of Alice's message ({m3}, {h3}) is the same as Eves message ({eve_m}, {eve_h})")
 
 
 task_2()

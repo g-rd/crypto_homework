@@ -128,7 +128,9 @@ def generate_keys(prime_number: int, generator: int, who) -> Tuple[int, int]:
     :return: public_key, private_key
     """
     # Generate a private key
-    print(f"{str(who).upper()} calculates her keys.")
+    print(f"{str(who).capitalize()} calculates her keys.")
+    print(f"{str(who).capitalize()} calculates her private key such that it is:")
+    print(f" 1 < key < p - 1 and gcd(key, p-1) == 1")
     private_key = generate_private_key(prime_number)
 
     # Calculate the public key as generator^private_key mod prime_number
@@ -205,7 +207,9 @@ def task_one():
     print(f"Alice decrypted: {alice_decrypted} and the orig message was: {alice_message}\n")
     print(f"Eve intercepts: {alice_c1, alice_c2}")
 
+    print(f"Eve uses Alices public key, generator and prime to calculate her own keys.")
     eve_priv, eve_pub = generate_keys(alice_prime, alice_generator, "Eve")
+
     Eve = Elgamal(
         priv_key=eve_priv,
         pub_key=alice_pub,
