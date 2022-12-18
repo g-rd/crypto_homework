@@ -129,7 +129,7 @@ def task_2():
     """
 
     print(f"Malicious Eve calculates a hash for {eve_m} based on Alices hashing algorithm")
-    print(f"hash = ab mod 55 = {eve_h}")
+    print(f"hash = {eve_m[0]}*{eve_m[1]} mod 55 = {eve_h}")
     print(f"Eve checks her has against Alices hashes that she intercepted")
     for hash in alices_hashes:
         print(f"{hash} =? ({eve_m}, {eve_h})")
@@ -156,10 +156,14 @@ RSA message signing is done using:
 m_hash^d mod phi(n): {eve_h}^{modular_inverse(alice_pub_e, phi_n)} mod {phi(alice_pub_mod)} = {eve_h**modular_inverse(alice_pub_e, phi_n) % phi(alice_pub_mod)}
 """)
     print(f"""
-Alice can verify each hash by: hash^e mod n:
-    h1 = {h1**alice_pub_e % alice_pub_mod} = m1_1 * m1_2 mod 55 = {m1[0] * m1[1] % alice_pub_mod}
-    h2 = {h2**alice_pub_e % alice_pub_mod} = m2_1 * m2_2 mod 55 = {m2[0] * m2[1] % alice_pub_mod}
-    h3 = {h3**alice_pub_e % alice_pub_mod} = m3_1 * m3_2 mod 55 = {m3[0] * m3[1] % alice_pub_mod}
+Alice can verify each hash by: hash^e mod n == m_a * m_b mod n:
+    h1: 8^3 mod 55 = {h1**alice_pub_e % alice_pub_mod} == m1: 12 * 6 mod 55 = {m1[0] * m1[1] % alice_pub_mod}
+    h2: 52^3 mod 55 = {h2**alice_pub_e % alice_pub_mod} == m2: 7 * 4 mod 55 = {m2[0] * m2[1] % alice_pub_mod}
+    h3: 11^3 mod 55 = {h3**alice_pub_e % alice_pub_mod} == m3: 22 * 8 mod 55 = {m3[0] * m3[1] % alice_pub_mod}
+    
+    Malicious message:
+    h4: 11^3 mod 55 = {h3**alice_pub_e % alice_pub_mod} == m4: 6 * 11 mod 55 = {eve_m[0] * eve_m[1] % alice_pub_mod}
+    
     """)
     print(f"Thus we have proven that the signature of Alice's message ({m3}, {h3}) is the same as Eves message ({eve_m}, {eve_h})")
 
