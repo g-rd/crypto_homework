@@ -177,6 +177,7 @@ print(f"-------------")
 print(f"Completeness:")
 print(f"If the claim is true, Bob always accepts it.")
 print(f"-------------")
+print(f"Explanation:")
 print(f"""
     For this protocol to pass the completeness check
     Alice should be able to prove to Bob that she is Alice
@@ -188,16 +189,18 @@ print(f"""
     of g^r and the values for h are additions of c = rand() and Alice's private keys.
     Since Alice can never know the c value that bob sends,
     she can never prepare her answer to pass the validation.
-    Completeness means that
-    Alice should be able to prove herself reliably, which she can't.
+    Completeness means that Alice should be able to prove herself reliably, 
+    which she can't.
     
     Example: {completeness()}
 """)
+print(f"Completeness answer: This protocol is not complete.\n")
 
 print(f"-------------")
 print(f"Soundness:")
 print(f"Eve cannot convince Bob that statement is true if it is actually false.")
 print(f"-------------")
+print(f"Explanation:")
 print(f"""
     The principle of soundness means that Eve's false claim should be only
     accepted with a very small probability.
@@ -207,11 +210,13 @@ print(f"""
     Example: Eve chooses y and h values such that the verification step will pass.
     {soundness()}
 """)
+print(f"Soundness answer: This protocol is not sound.\n")
 
 print(f"-------------")
-print(f"Zero-knowledge::")
+print(f"Zero-knowledge:")
 print(f"Bob only learns the truth value of the claim and nothing else.")
 print(f"-------------")
+print(f"Explanation:")
 print(f"""
     As taken from the lecture notes of Ahto Puldas:
     There is an efficient simulator M that is able to generate
@@ -234,3 +239,4 @@ print(f"""
     But actually:
     {zero_knowledge()}
 """)
+print(f"Zero-knowledge answer: This protocol doesn't satisfy ZK.")
