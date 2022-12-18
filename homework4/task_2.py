@@ -135,26 +135,32 @@ def task_2():
         print(f"{hash} =? ({eve_m}, {eve_h})")
         if hash[1] == eve_h:
             print(f"this: {hash} = ({eve_m}, {eve_h})")
-            print(f"Eve found that she has the same hash {eve_h} "
-                  f"corresponding to Alices message {hash[0]}")
+            print(f"""Eve found that she has the same hash {eve_h} corresponding to Alices message {hash[0]}""")
             print(f"This hash: {eve_h} is useful because"
                   f" Eve can use it as a signature for her own message {eve_m}.")
+    print(f"""
+To check if Eve actually could use it to sign her own message 
+we can see if we can find the private key of Alice and use it to sign Eve's message legitimately.
+For this we need to find the value for d (private_key), such that it satisfies: e * d = 1 mod phi(n). Eve knows Alice's
+public values for e = {alice_pub_e} and n = {alice_pub_mod}.
 
-    print("\n")
-    print("To check if Eve actually could use it"
-          " to sign her own message we can see if we can find the private key of Alice.")
-    print("And use it to sign Eve's message legitimately.")
-    print("For this we need to find the value for d (private_key), such that it satisfies: e * d = 1 mod phi(n)"
-          )
-    print(f"Eve knows Alice's public values for e = {alice_pub_e} and n = {alice_pub_mod}.")
-    print(f"RSA private key is generated such that: e * d mod phi(n) = 1")
-    print("To find the value for d we can calculate the multiplicative inverse: d = e^-1 mod phi(n).")
-    print(f"Eve also needs to find phi(n) for this she uses eulers totient function of phi({alice_pub_mod}) = {phi_n} ")
-    print(f"Lastly she can now use EEA to find d = e^-1 mod phi(n). = {modular_inverse(alice_pub_e, phi_n)}")
-    print(f"Eve can now use d = {modular_inverse(alice_pub_e, phi_n)} to sign her message.")
-    print(f"RSA message signing is done using: \n m_hash^d mod phi(n): "
-          f"{eve_h}^{modular_inverse(alice_pub_e, phi_n)} mod {phi(alice_pub_mod)} = "
-          f"{eve_h**modular_inverse(alice_pub_e, phi_n) % phi(alice_pub_mod)}")
+RSA private key is generated such that: e * d mod phi(n) = 1 To find the value for d we can 
+calculate the multiplicative inverse: d = e^-1 mod phi(n).
+
+Eve also needs to find phi(n) for this she uses Euler's totient function of phi({alice_pub_mod}) = {phi_n}.
+Lastly she can now use EEA to find d = e^-1 mod phi(n) = {modular_inverse(alice_pub_e, phi_n)}.
+
+Eve can now use d = {modular_inverse(alice_pub_e, phi_n)} to sign her message.
+
+RSA message signing is done using: 
+m_hash^d mod phi(n): {eve_h}^{modular_inverse(alice_pub_e, phi_n)} mod {phi(alice_pub_mod)} = {eve_h**modular_inverse(alice_pub_e, phi_n) % phi(alice_pub_mod)}
+""")
+    print(f"""
+Alice can verify each hash by: hash^e mod n:
+    h1 = {h1**alice_pub_e % alice_pub_mod} = m1_1 * m1_2 mod 55 = {m1[0] * m1[1] % alice_pub_mod}
+    h2 = {h2**alice_pub_e % alice_pub_mod} = m2_1 * m2_2 mod 55 = {m2[0] * m2[1] % alice_pub_mod}
+    h3 = {h3**alice_pub_e % alice_pub_mod} = m3_1 * m3_2 mod 55 = {m3[0] * m3[1] % alice_pub_mod}
+    """)
     print(f"Thus we have proven that the signature of Alice's message ({m3}, {h3}) is the same as Eves message ({eve_m}, {eve_h})")
 
 
