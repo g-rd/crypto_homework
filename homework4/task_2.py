@@ -154,15 +154,20 @@ Eve can now use d = {modular_inverse(alice_pub_e, phi_n)} to sign her message.
 
 RSA message signing is done using: 
 m_hash^d mod phi(n): {eve_h}^{modular_inverse(alice_pub_e, phi_n)} mod {phi(alice_pub_mod)} = {eve_h**modular_inverse(alice_pub_e, phi_n) % phi(alice_pub_mod)}
-""")
-    print(f"""
+
+Eve didn't really need to find Alice's key, since this can prove that
+The signature works.
+
 Alice can verify each hash by: hash^e mod n == m_a * m_b mod n:
     h1: 8^3 mod 55 = {h1**alice_pub_e % alice_pub_mod} == m1: 12 * 6 mod 55 = {m1[0] * m1[1] % alice_pub_mod}
     h2: 52^3 mod 55 = {h2**alice_pub_e % alice_pub_mod} == m2: 7 * 4 mod 55 = {m2[0] * m2[1] % alice_pub_mod}
     h3: 11^3 mod 55 = {h3**alice_pub_e % alice_pub_mod} == m3: 22 * 8 mod 55 = {m3[0] * m3[1] % alice_pub_mod}
     
-    Malicious message:
+    Malicious message that works:
     h4: 11^3 mod 55 = {h3**alice_pub_e % alice_pub_mod} == m4: 6 * 11 mod 55 = {eve_m[0] * eve_m[1] % alice_pub_mod}
+    
+    Malicious message that doesn't work:
+    h5: 35^3 mod 55 = {35**alice_pub_e % alice_pub_mod} == m4: 5 * 7 mod 55 = {5 * 7 % alice_pub_mod}
     
     """)
     print(f"Thus we have proven that the signature of Alice's message ({m3}, {h3}) is the same as Eves message ({eve_m}, {eve_h})")
