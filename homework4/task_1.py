@@ -187,6 +187,7 @@ class Elgamal:
             print(f"""
     {who.capitalize()} creates ciphertext:
     y = random value 1 < y < p-1 such that its coprime to p.
+    s = public_key^y mod p
     C1 = g^y mod p = {self.generator}^{y} mod {self.prime_number} = {c1}
     C2 = m * s mod p = {message} * {s} mod {self.prime_number} = {c2}
         """.lstrip("\n").rstrip("\n"))
