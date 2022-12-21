@@ -159,12 +159,15 @@ Eve didn't really need to find Alice's key, since this can prove that
 The signature works.
 
 Eve can verify each hash by: hash^e mod n == m_a * m_b mod n:
-    h1: 8^3 mod 55 = {h1**alice_pub_e % alice_pub_mod} == m1: 12 * 6 mod 55 = {m1[0] * m1[1] % alice_pub_mod}
-    h2: 52^3 mod 55 = {h2**alice_pub_e % alice_pub_mod} == m2: 7 * 4 mod 55 = {m2[0] * m2[1] % alice_pub_mod}
-    h3: 11^3 mod 55 = {h3**alice_pub_e % alice_pub_mod} == m3: 22 * 8 mod 55 = {m3[0] * m3[1] % alice_pub_mod}
+    σ^e mod n = 11^3 mod 55 = 11 ≡ 6 * 11 mod 55
+    h3 ∶σ_3^e mod n = 11^3 mod 55 = 11 ≡ 22 * 8 mod 55
+    
+    Intercepted message M3:
+    m3, h3 = (22, 8), 11
+    h3: 11^3 mod 55 = {h3**alice_pub_e % alice_pub_mod} == m4: 22 * 8 mod 55 = {m3[0] * m3[1] % alice_pub_mod}
     
     Malicious message that works:
-    h4: 11^3 mod 55 = {h3**alice_pub_e % alice_pub_mod} == m4: 6 * 11 mod 55 = {eve_m[0] * eve_m[1] % alice_pub_mod}
+    h4: 11^3 mod 55 = {eve_h**alice_pub_e % alice_pub_mod} == m4: 6 * 11 mod 55 = {eve_m[0] * eve_m[1] % alice_pub_mod}
     
     Malicious message that doesn't work:
     h5: 35^3 mod 55 = {35**alice_pub_e % alice_pub_mod} == m4: 5 * 7 mod 55 = {5 * 7 % alice_pub_mod}
