@@ -186,7 +186,8 @@ class Elgamal:
         if who:
             print(f"""
     {who.capitalize()} creates ciphertext:
-    C1 = g^k mod p = {self.generator}^{self.priv_key} mod {self.prime_number} = {c1}
+    y = random value 1 < y < p-1 such that its coprime to p.
+    C1 = g^y mod p = {self.generator}^{y} mod {self.prime_number} = {c1}
     C2 = m * s mod p = {message} * {s} mod {self.prime_number} = {c2}
         """.lstrip("\n").rstrip("\n"))
 
@@ -213,15 +214,18 @@ def task_one():
     print("------------")
     print("TASK 1.1")
     print("------------\n")
-    alice_prime = 19777
-    alice_generator = 51
+    # alice_prime = 19777
+    # alice_generator = 51
+    alice_prime = 41
+    alice_generator = 6
     Alice = Elgamal(
         prime_number=alice_prime,
         generator=alice_generator,
         who="Alice"
     )
     alice_pub, alice_generator, alice_prime = Alice.publish()
-    alice_message = 115
+    # alice_message = 115
+    alice_message = 16
     alice_c1, alice_c2 = Alice.encrypt(alice_message, "Alice")
     alice_decrypted = Alice.decrypt(alice_c1, alice_c2)
     print(f"""
