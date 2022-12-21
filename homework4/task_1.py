@@ -104,14 +104,14 @@ def baby_step_giant_step(base: int, result: int, prime: int) -> int:
 
 def create_random_key(p):
     """
-    The function first generates a private key x using the generate_private_key function,
+    The function generates a random k value
     which chooses a random integer between 0 and p-1 such that the greatest common divisor
-    (GCD) of p-1 and x is 1.
-    This ensures that x is relatively prime to p-1,
+    (GCD) of p-1 and k is 1.
+    This ensures that k is relatively prime to p-1,
     which is a necessary condition for the ElGamal cryptosystem to work.
 
     :param p: prime_number
-    :return: private_key
+    :return: k: random k value such that its relatively prime to p.
     """
     key = randint(0, p - 1)
     while gcd(p - 1, key) != 1:
@@ -128,20 +128,21 @@ def generate_keys(prime_number: int, generator: int, who = None) -> Tuple[int, i
     :return: public_key, private_key
     """
     # Generate a private key
+    private_key = create_random_key(prime_number)
     if who:
         print(f"""
     {str(who).capitalize()} calculates her keys:
     Her private key such that it is:
-        1 < key < p - 1 and gcd(key, p-1) == 1 
+        1 < key < p - 1 and gcd(key, p-1) == 1
+    private key: {private_key} 
     """.lstrip("\n").rstrip("\n"))
-    private_key = create_random_key(prime_number)
 
     # Calculate the public key as generator^private_key mod prime_number
     public_key = pow(generator, private_key, prime_number)
     if who:
         print(f"""
-    and public key:"
-        f" y = g^x mod p = {generator}^{private_key} mod {prime_number} = {public_key}
+    and public key:
+        y = g^x mod p = {generator}^{private_key} mod {prime_number} = {public_key}
     """.lstrip("\n"))
     return private_key, public_key
 
@@ -176,10 +177,10 @@ class Elgamal:
         :return: ciphertext in the form of a tuple of (c1, c2)
         """
 
-        k = create_random_key(self.prime_number)
+        y = create_random_key(self.prime_number)
 
-        c1 = pow(self.generator, k, self.prime_number)
-        s = pow(self.pub_key, k, self.prime_number)  # The shared secret
+        c1 = pow(self.generator, y, self.prime_number)
+        s = pow(self.pub_key, y, self.prime_number)  # The shared secret
         c2 = (message * s) % self.prime_number
 
         if who:
@@ -287,15 +288,11 @@ def task_two():
     Adversary carol knows that the first part of Elgamal cipher is calculated by:
     c11 = generate^private_key mod prime_number and c21 = generate^private_key mod prime_number.
 
-    From this Carol can conclude that g^pk1 is equal to g^k2 mod p. Carol also knows that the messages has no impact on the
-    first part of the Elgamal cipher and that for each message the modulus and generator are the same.
-
-    From this we can conclude that the private_key must have been the same for both messages to end up with the
-    situation where c11 = c21. 
-
-    This also means that the private_key has to be the same for c2 when c2 was calculated using c2 = m * (y^k mod p) mod p 
-
+    From this Carol can conclude that c11 = g^k is equal to c21 = g^k mod p where k values are probably equal 
+    in Elgamal. Carol also knows that the messages has no impact on the first part of the Elgamal 
+    cipher and that for each message the modulus and generator are the same.
     """
+
     m1 = 411
     m2 = 63
     alice_prime = 19777
