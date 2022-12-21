@@ -4,22 +4,31 @@ from random import randint
 
 class Alice:
     def __init__(self, verbose=False):
+        self.q =  7 # prime_nr
+        # Choose generator Z_q
+        self.g = randint(1, self.q - 1) # generator
+        # choose random a and b in Z_q
+        self.a = randint(1, self.q - 1)
+        self.b = randint(1, self.q - 1)
+        self.z = (self.a + self.b) % self.q
+        self.x = pow(self.g, self.z, self.q)  # This is pub key available to Bob
+
         self.c = None
-        self.g = q = 61
-        self.a = randint(1, self.g-1)
-        self.b = 7
-        self.x = self.a + self.b
+        self.r = None
         self.verbose = verbose
 
-    def get_g(self):
-        return self.g
+    def get_pub_values(self):
+        return self.g, self.x, self.q
 
     def get_hashes(self):
         """
         We removed the hashes, because they don't help.
         :return:
         """
-        return None
+        r = randint(1, q - 1)
+        self.r = r
+        h = pow(self.g, r, self.q)
+        return h
 
     def set_c(self, c_value):
         """
@@ -36,61 +45,77 @@ class Alice:
         Alice signs the message y.
         :return:
         """
-        return self.x**2 % self.g
+        y = (self.r + (self.c * self.z))
+        return y
 
 
 class Bob:
 
     def __init__(self, verbose=False):
+        self.q = None
+        # Choose generator Z_q
+        self.g = None
         self.g = None
         self.x = None
-        self.y = None
+        self.h = None
         self.c = None
+        self.y = None
+        self.c = randint(1, 10)
         self.verbose = verbose
 
-    def set_g(self, g):
-        self.g = g
-
-    def listen(self, hashes):
+    def set_pub_values(self, g, x, q):
         """
-        There is no need for this anymore.
-        :param hashes:
+        g: generator
+        z: public key
+        q: prime_nr
+        :param g:
+        :param z:
+        :param q:
         :return:
         """
-        return None
+        self.g = g
+        self.x = x
+        self.q = q
+
+    def set_hash(self, h):
+        self.h = h
 
     def get_c(self):
-        self.c = randint(1, 10)
+        """
+        Bob sends c
+        :return:
+        """
         return self.c
 
-    def set_y(self, y_value):
-        self.y = y_value
-        print(self.y)
+    def set_y(self, y):
+        self.y = y
 
     def verify(self):
-        pass
 
+        if self.h * (self.x ** self.c) % self.q == self.g ** self.y % self.q:
+            print("Alice, has been verified.")
+            pass
 
-q = prime_nr = 7
-# Choose generator Z_q
-g = generator = randint(1, prime_nr - 1)
-# choose random a and b in Z_q
-a = randint(1, prime_nr - 1)
-b = randint(1, prime_nr - 1)
-z = (a + b) % prime_nr
-x = pow(generator, z, prime_nr) # This is pub key available to Bob
+# Init Alice
+alice = Alice()
 
-#Schnorr scheme
-# Alice picks random r = randint(1, q-1) value
-r = randint(1, q - 1)
-# Alice sends h to Bob
-h = pow(generator, r, prime_nr)
-# Bob chooses c = randint(1, q-1)
-c = randint(1, q-1)
-# Bob sends c to Alice
-# Alice computes s = (r + (c * x)) % q
-#s = (r + (c * x)) % q
-y = (r + (c * z))
-# Alice sends s to Bob
-# Bob check if h * (z**c) % q == g**s % q
-assert h * (x ** c) % q == g ** y % q
+# Init Bob
+bob = Bob()
+
+# Bob gets public values
+g, z, q = alice.get_pub_values()
+
+# Bob sets public values
+bob.set_pub_values(g, z, q)
+
+# Alice sends h value to Bob
+bob.set_hash(alice.get_hashes())
+
+# Bob sends c value to Alice
+alice.set_c(bob.get_c())
+
+# Alice Sends y value to Bob
+bob.set_y(alice.get_y())
+
+# Bob verifies Alice
+bob.verify()
