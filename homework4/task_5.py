@@ -13,9 +13,6 @@ class Bob:
         self.c = None
         self.verbose = verbose
 
-    def set_x_value(self, x):
-        self.x = x
-
     def set_g_value(self, g):
         self.g = g
 
@@ -61,9 +58,6 @@ class Alice:
     def get_g_value(self):
         return self.g
 
-    def get_x_value(self):
-        return self.a + self.b
-
     def send_hashes(self):
         return self.g ** self.r_1, self.g ** self.r_2
 
@@ -84,15 +78,10 @@ class Eve(Alice):
     def send_y_values(self):
         return 1, 1
 
-    def set_x_value(self, x):
-        self.x = x
-
 
 class Evan(Bob):
     def find_the_secrets(self):
-        if self.c and self.x:
-            "x = a + b"
-            ""
+        if self.c and self.y_1 and self.y_2:
             a = self.y_1 - self.c
             b = self.y_2 - self.c
             if self.verbose:
@@ -159,8 +148,6 @@ def zero_knowledge():
     evan = Evan()
     evan.g = alice.g
     evan.x = alice.x
-    print(f"Only Alice knows a = {alice.a} and b = {alice.b}")
-    print(f"Evan knows g = {evan.g} and x = {evan.x}")
     print(f"First Alice sends hashes to Evan {alice.send_hashes()}")
     evan.listen(alice.send_hashes())
     print(f"Evan generates c and sends to Alice {evan.send_c()}")
@@ -179,18 +166,16 @@ print(f"If the claim is true, Bob always accepts it.")
 print(f"-------------")
 print(f"Explanation:")
 print(f"""
-    For this protocol to pass the completeness check
-    Alice should be able to prove to Bob that she is Alice
-    given that she has followed the protocol correctly.
+    Completeness: For this protocol to pass the completeness check
+    Alice should be able to prove to Bob that she is Alice given that she has followed the protocol correctly.
     In this example Alice is never able to prove to Bob that she is Alice even though
     she has followed the protocol.
-    This is because Bob will check that Alice is who she said she is 
-    by the equation of y_1 * y_2 = h_1 * h_2. But the values of y are exponents
-    of g^r and the values for h are additions of c = rand() and Alice's private keys.
-    Since Alice can never know the c value that bob sends,
-    she can never prepare her answer to pass the validation.
-    Completeness means that Alice should be able to prove herself reliably, 
-    which she can't.
+    This is because Bob will check that Alice is who she said she is
+    by the equation of y1 ∗ y2 = h1 ∗ h2. But the values of y are calculated as
+    y1 = gr1 and y2 = gr2 where r1 = rand(int) and r2 = rand(int), the values for hi are additions of
+    c = rand(int) as such that h1 = a + c and h2 = b + c.
+    So this equation that Bob checks doesn’t become valid which means that the Completeness checks
+    fails since Bob cannot reliably verify Alice.
     
     Example: {completeness()}
 """)

@@ -65,13 +65,15 @@ def chinese_remainder_theorem(c, m):
     # 4. We add all the results together to find the result to the system of congruences.
 
     for c_i, m_i in zip(c, m):
-      result += (M_product / m_i) * c_i * modular_inverse(M_product / m_i, m_i)
-
-    for c_i, m_i in zip(c, m):
       step_1 = (M_product / m_i)
+      print("step_1", f"({M_product} / {m_i})", step_1 )
       step_2 = modular_inverse(step_1, m_i)
-      step_3 = step_1 * step_2
+      print("step_1", f"modular_inverse({step_1}, {m_i})", step_2)
+      step_3 = step_1 * step_2 * c_i
+      print(f"{step_1} * {step_2} * {c_i}")
       result += step_3
+
+    print(result)
 
     # 6. We return the value of the result in mod M_product that we found
     return int(result % M_product)

@@ -158,7 +158,7 @@ m_hash^d mod phi(n): {eve_h}^{modular_inverse(alice_pub_e, phi_n)} mod {phi(alic
 Eve didn't really need to find Alice's key, since this can prove that
 The signature works.
 
-Alice can verify each hash by: hash^e mod n == m_a * m_b mod n:
+Eve can verify each hash by: hash^e mod n == m_a * m_b mod n:
     h1: 8^3 mod 55 = {h1**alice_pub_e % alice_pub_mod} == m1: 12 * 6 mod 55 = {m1[0] * m1[1] % alice_pub_mod}
     h2: 52^3 mod 55 = {h2**alice_pub_e % alice_pub_mod} == m2: 7 * 4 mod 55 = {m2[0] * m2[1] % alice_pub_mod}
     h3: 11^3 mod 55 = {h3**alice_pub_e % alice_pub_mod} == m3: 22 * 8 mod 55 = {m3[0] * m3[1] % alice_pub_mod}
