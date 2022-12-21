@@ -214,18 +214,15 @@ def task_one():
     print("------------")
     print("TASK 1.1")
     print("------------\n")
-    # alice_prime = 19777
-    # alice_generator = 51
-    alice_prime = 41
-    alice_generator = 6
+    alice_prime = 19777
+    alice_generator = 51
     Alice = Elgamal(
         prime_number=alice_prime,
         generator=alice_generator,
         who="Alice"
     )
     alice_pub, alice_generator, alice_prime = Alice.publish()
-    # alice_message = 115
-    alice_message = 16
+    alice_message = 115
     alice_c1, alice_c2 = Alice.encrypt(alice_message, "Alice")
     alice_decrypted = Alice.decrypt(alice_c1, alice_c2)
     print(f"""
